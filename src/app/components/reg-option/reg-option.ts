@@ -10,14 +10,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './reg-option.html',
   styleUrls: ['./reg-option.css']
 })
-export class ChooseRegisterComponent {
+export class ChooseUserComponent {
   constructor(private router: Router) {}
 
   registerRider() {
-    this.router.navigate(['/register-rider']);
+    this.router.navigate(['/login',"Rider"]);
   }
 
   registerDriver() {
-    this.router.navigate(['/register-driver']);
+    this.router.navigate(['/login',"Driver"]);
   }
 }

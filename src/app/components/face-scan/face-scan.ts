@@ -61,9 +61,9 @@ export class FaceScan implements OnInit, OnDestroy {
       } else {
         this.faceService.loginWithFace(file).subscribe({
           next: (res: any) => {
-            console.log(res);
             if ( res.token) {
               this.authService.saveToken(res.token);
+              this.router.navigate(['/driver-dashboard']); // or wherever
               alert('Login successful');
             } else {
               alert('No matching face found');

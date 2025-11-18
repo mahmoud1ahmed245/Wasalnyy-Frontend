@@ -3,7 +3,7 @@
 
   <video #video autoplay playsinline></video>
 
-  <button (click)="captureAndUpload()">@if(mode==='register'){Register Face}@else{Login with Face}</button>
+  <button (click)="captureAndUpload()" class="btn-primary text-white" >@if(mode==='register'){Register Face}@else{Login with Face}</button>
 
   @if(preview) {
     <img [src]="preview" class="preview" />
