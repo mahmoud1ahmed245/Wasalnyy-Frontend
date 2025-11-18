@@ -8,15 +8,12 @@ import { environment } from '../../enviroments/enviroment';
 export class FaceService {
  baseUrl=`${environment.apiUrl}/auth`;
   constructor(private http: HttpClient) {}
-  // face.service.ts (methods)
 uploadDriverFace(userId: string, file: File) {
   const fd = new FormData();
   fd.append("DriverId", userId);
   fd.append("FaceImage", file, file.name);
 
-  // DEBUG → verify the browser actually has the data
-  console.log("DriverId:", fd.get("DriverId"));
-  console.log("FaceImage:", fd.get("FaceImage"));
+
 
   return this.http.post(
     `${this.baseUrl}/register/driver-face`,

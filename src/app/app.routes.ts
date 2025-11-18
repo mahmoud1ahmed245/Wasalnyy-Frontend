@@ -6,6 +6,8 @@ import { ChooseUserComponent } from './components/reg-option/reg-option';
 import { FaceScan } from './components/face-scan/face-scan';
 import { DriverDashboard } from './components/driver-dashboard/driver-dashboard';
 import { RiderDashboard } from './components/rider-dashboard/rider-dashboard';
+import { PaymentSuccessful } from './components/payment-successful/payment-successful';
+import { PaymentFailed } from './components/payment-failed/payment-failed';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'choose-user-type', pathMatch: 'full' },
@@ -17,5 +19,7 @@ export const routes: Routes = [
   { path: 'face-scan/login', component: FaceScan },
   {path: 'driver-dashboard', component: DriverDashboard},
   {path: 'rider-dashboard', component: RiderDashboard},
+  {path:'payment-successful', component:PaymentSuccessful},
+  {path:'payment-failed', component:PaymentFailed},
   {path: '**', redirectTo: 'choose-user-type' }
 ];
