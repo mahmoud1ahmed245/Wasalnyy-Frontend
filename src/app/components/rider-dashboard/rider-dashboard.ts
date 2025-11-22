@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PaymentService } from '../../services/payment.service';
 import { AuthService } from '../../auth/auth-service';
+import { Router } from '@angular/router';
+import { OnInit } from '@angular/core';
+import { SignalrServiceTs } from '../../services/signalr.service.ts';
 
 @Component({
   selector: 'app-rider-dashboard',
@@ -9,17 +11,19 @@ import { AuthService } from '../../auth/auth-service';
   templateUrl: './rider-dashboard.html',
   styles: ``,
 })
-export class RiderDashboard {
-paymentValue:number=0;
-  constructor(private paymentService: PaymentService,private authService: AuthService) {}
+export class RiderDashboard implements OnInit {
 
-  makePayment(){
-    this.paymentService.MakePayment(this.paymentValue).subscribe((res:any) => {
-      window.location.href = res.url;
-      console.log('Payment successful', res);
-    }, error => {
-      console.error('Payment failed', error);
-    });
+  constructor(private authService: AuthService, private router: Router, private signalrService: SignalrServiceTs) {}
+ngOnInit(): void {
+
+  this.signalrService.startConnection();
+}
+
+goToWallet(){
+    this.router.navigate(['/wallet']);
+  }
+  requestRide(){
+    this.router.navigate(['/rider-map']);
   }
 
   logout() {

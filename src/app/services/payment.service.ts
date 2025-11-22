@@ -10,6 +10,7 @@ export class PaymentService {
   baseUrl=`${environment.apiUrl}/payment`;
   constructor(private http: HttpClient) {}
   MakePayment(amount:number){
+    let rideId='123456';
     return this.http.post(`${this.baseUrl}/create-session`,amount);
   }
   

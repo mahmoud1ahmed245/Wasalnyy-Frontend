@@ -1,6 +1,15 @@
-<p>rider-dashboard works!</p>
-<button (click)="logout()" class="btn btn-danger">Sign Out</button>
+<div class="w-75 d-flex flex-row-reverse m-2">
+    <button (click)="logout()" class="btn btn-outline-dark mx-2">Sign Out</button>
+</div>
 
-<p>charge up your wallet</p>
-<input type="number" name="payment value" id="paymment-value" [(ngModel)]="paymentValue"/>
-<button (click)="makePayment()">make payment for this amount</button>
+
+<div class="container d-flex p-2 align-items-center justify-content-around">
+    <div class="row container d-flex flex-wrap w-50">
+        <div style="cursor: pointer;" class="col-6 w-100 > bg-dark-subtle h-25 fw-bold text-black p-1 m-2 pb-5 rounded-2" (click)="requestRide()">Request A Ride</div>
+        <div style="cursor: pointer;" class="col-6 w-100 > bg-dark-subtle fw-bold text-black m-2 p-1 pb-5 rounded-2">Account </div>
+    </div>
+    <div class="row container d-flex flex-wrap w-50">
+        <div style="cursor: pointer;" class="col-6 w-100 > bg-dark-subtle fw-bold text-black m-2 p-1 pb-5 rounded-2" (click)="goToWallet()">Wallet</div>
+        <div style="cursor: pointer;" class="col-6 w-100 > bg-dark-subtle fw-bold text-black m-2 p-1 pb-5 rounded-2">View past trips</div>
+    </div>
+</div>

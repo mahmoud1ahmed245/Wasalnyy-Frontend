@@ -11,6 +11,9 @@ import { PaymentFailed } from './components/payment-failed/payment-failed';
 import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
 import { AuthGuard } from './auth/auth-guard';
 import { DashboardRedirectComponent } from './components/dashboard-redirect/dashboard-redirect';
+import { DriverMap } from './components/driver-map/driver-map';
+import { RiderMap } from './components/rider-map/rider-map';
+import { Wallet } from './components/wallet/wallet';
 
 export const routes: Routes = [
   // default route redirects based on login status
@@ -25,9 +28,12 @@ export const routes: Routes = [
   { path: 'driver-dashboard', component: DriverDashboard, canActivate: [AuthGuard], data: { role: 'Driver' } },
   { path: 'rider-dashboard', component: RiderDashboard, canActivate: [AuthGuard], data: { role: 'Rider' } },
   { path: 'admin-dashboard', component: AdminDashboard, canActivate: [AuthGuard], data: { role: 'Admin' } },
-
-  { path: 'payment-successful', component: PaymentSuccessful },
+   {path:`driver-map`,component:DriverMap, canActivate: [AuthGuard], data: { role: 'Driver' }},
+  {path:`rider-map`,component:RiderMap, canActivate: [AuthGuard], data: { role: 'Rider' }},
+  {path:'wallet',component:Wallet, canActivate: [AuthGuard]},
+  
   { path: 'payment-failed', component: PaymentFailed },
+  { path: 'payment-successful', component: PaymentSuccessful },
 
   { path: '**', redirectTo: '' } // fallback to dashboard redirect
 ];
