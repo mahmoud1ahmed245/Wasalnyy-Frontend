@@ -40,7 +40,6 @@ ngOnInit(): void {
        this.pickupCoords={...trip.pickupCoordinates};
       this.destinationCoords={...trip.distinationCoordinates};
     this.tripStatus=trip.tripStatus; 
-      console.log(trip);
   }else {
     this.activeTrip = null;
     this.tripStatus = null;
@@ -51,7 +50,6 @@ ngOnInit(): void {
   });
   this.tripInfoService.driver$.subscribe(driver=>{
     this.driver=driver;
-    console.log(driver);
   })
 }
 handleOriginUpdate(firstPointVal:LocationResult){
@@ -75,7 +73,6 @@ handleTripRequest(status:boolean){
           next:res=>{
             this.InTrip=true;
             this.tripStatus=TripStatus.Requested;
-            console.log("trip requested",res);
           }
         }
       );
@@ -85,8 +82,6 @@ confirmTripRequest(tripId:any){
   this.tripRequestService.confirmTripRequest(tripId).subscribe({
 next: (res) => {
      this.tripStatus=TripStatus.Confirmed;
-     console.log(this.tripStatus);
-     console.log(res);
   },
   error: (err) => {
         console.error('Error:', err);

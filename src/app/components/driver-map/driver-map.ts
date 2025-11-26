@@ -40,7 +40,6 @@ ngOnInit(): void {
     this.tripStatus=trip.tripStatus;
     this.pickupCoords={...trip.pickupCoordinates};
     this.destinationCoords={...trip.distinationCoordinates};
-    console.log(this.currentCoords,this.pickupCoords,this.destinationCoords);  
     }
   })
  this.tripInfoService.listofAvailableTrips$.subscribe(listOfAvailTrips=>{
@@ -57,7 +56,6 @@ ngOnInit(): void {
 
   setAvailable() {
     this.driverHubService.SetAsAvailable(this.currentCoords!).subscribe(res => {
-      console.log('Driver set as available',res);
       this.available=true;
       this.intrip=false;
 

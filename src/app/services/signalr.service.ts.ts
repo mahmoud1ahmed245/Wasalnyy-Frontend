@@ -32,10 +32,8 @@ export class SignalrServiceTs {
             this.tripInfoService.setInTrip(true);
           });
           this.hubConnection.on('tripRequested',trip=>{
-            console.log("tripRequested",trip);
             this.tripInfoService.updateTrip(trip)})
            this.hubConnection.on('tripConfirmed',trip=>{
-            console.log("tripConfirmed",trip);
             this.tripInfoService.updateTrip(trip)})
            
             
@@ -51,7 +49,6 @@ export class SignalrServiceTs {
             this.tripInfoService.clearListOfAvailableTrips();
           });      
           this. hubConnection.on('tripAccepeted', driver=> {
-            console.log("trip accepted");
             this.tripInfoService.updateDriver(driver)}
           
           );
@@ -62,10 +59,6 @@ export class SignalrServiceTs {
          this.hubConnection.on("availableTripsInZone", (trip) =>{
           this.tripInfoService.updateListOfAvailableTrips(trip);
         });
-        //  this.hubConnection.on("tripAccepeted", (trip) => {
-        //   this.tripInfoService.updateTrip(trip)
-        //   this.tripInfoService.setInTrip(true);
-        //  });
           }
 
 

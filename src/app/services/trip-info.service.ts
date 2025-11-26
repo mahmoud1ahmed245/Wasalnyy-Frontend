@@ -31,7 +31,6 @@ updateTrip(tripData: any) {
     ...currentTrip,
     CurrentCoordinates: {...Coords}
   };
-  console.log("trip coords updated",newTrip);
   this.trip.next(newTrip); 
 }
   updateDriver(driverData: any) {
@@ -56,7 +55,6 @@ updateTrip(tripData: any) {
   }
   setInTrip(status: boolean) {
     this.Intrip.next(status);
-    console.log("trip status updated",this.Intrip.value);
   }
   get isInTripValue() {
   return this.Intrip.value;
@@ -66,7 +64,6 @@ updateTrip(tripData: any) {
       const currentList = this.listofAvailableTrips.value;
      const updatedList = [...currentList, trip]; 
    this.listofAvailableTrips.next(updatedList);
-   console.log("Available trips updated:", this.listofAvailableTrips.value);
   }
   clearListOfAvailableTrips() {
     this.listofAvailableTrips.next( []);
