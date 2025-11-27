@@ -37,7 +37,7 @@ updateTrip(tripData: any) {
     this.driver.next(driverData);
     const coordinates=driverData.coordinates;
     const currentTrip=this.trip.value;
-    const newTrip={...currentTrip,CurrentCoordinates:{...coordinates},tripStatus:TripStatus.Accepted}
+    const newTrip={...currentTrip,CurrentCoordinates:{...coordinates},tripStatus:"Accepted"}
     this.updateTrip(newTrip);    
   }
   updateDriverCoords(Coords:any){

@@ -22,7 +22,7 @@ export class DriverMap implements OnInit, OnDestroy{
   tripId: string = "";
   available:boolean=false;
   intrip:boolean=false;
-  tripStatus:TripStatus|null=null;
+  tripStatus:string|null=null;
   activeTrip:any=null;
   availableTrips:any[]=[];
   constructor(private driverHubService: DriverHubService,private tripInfoService:TripInfoService,private router:Router) { }
@@ -77,9 +77,9 @@ ngOnInit(): void {
       if (acceptedTrip) {
           this.activeTrip = {
           ...acceptedTrip,
-          tripStatus: TripStatus.Accepted 
+          tripStatus: "Accepted" 
         };
-        this.tripStatus = TripStatus.Accepted;
+        this.tripStatus = "Accepted";
         this.intrip = true;
         this.availableTrips = [];
         this.tripInfoService.updateTrip(this.activeTrip);

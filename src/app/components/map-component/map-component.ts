@@ -88,14 +88,6 @@ export class MapComponent implements AfterViewInit, OnInit, OnChanges {
 }
 
 
-  // private initMap() {
-  //   this.map = L.map('map').setView([30.0444, 31.2357], 13);
-
-  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //     attribution: '&copy; OpenStreetMap contributors'
-  //   }).addTo(this.map);
-  // }
-
   private initMap() {
   this.map = L.map(this.mapContainer.nativeElement)
     .setView([30.0444, 31.2357], 13);

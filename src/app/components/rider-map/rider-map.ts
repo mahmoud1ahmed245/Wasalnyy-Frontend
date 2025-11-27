@@ -22,7 +22,7 @@ export class RiderMap implements OnInit {
   destinationCoords:Coordinates|null=null;  
   paymentMethod: PaymentMethod | null = null;
   InTrip: boolean = false;
-  tripStatus:TripStatus|null=null;
+  tripStatus:string|null=null;
   activeTrip:any|null=null;
   driver:any|null=null;
 
@@ -72,7 +72,7 @@ handleTripRequest(status:boolean){
         {
           next:res=>{
             this.InTrip=true;
-            this.tripStatus=TripStatus.Requested;
+            this.tripStatus="Requested";
           }
         }
       );
@@ -81,7 +81,7 @@ handleTripRequest(status:boolean){
 confirmTripRequest(tripId:any){
   this.tripRequestService.confirmTripRequest(tripId).subscribe({
 next: (res) => {
-     this.tripStatus=TripStatus.Confirmed;
+     this.tripStatus="Confirmed";
   },
   error: (err) => {
         console.error('Error:', err);
@@ -97,11 +97,11 @@ getFirstPoint() {
     return  this.currentCoords;
   }
   switch(this.tripStatus) {
-    case TripStatus.Requested:
-    case TripStatus.Confirmed:
+    case "Requested":
+    case "Confirmed":
       return this.pickupCoords ?? null;
-    case TripStatus.Accepted:
-      case TripStatus.Started:
+    case "Accepted":
+      case "Started":
       return this.currentCoords ?? null;
     default:
       return null;
@@ -114,11 +114,11 @@ getSecondPoint() {
   }
 
   switch(this.tripStatus) {
-    case TripStatus.Requested:
-    case TripStatus.Confirmed:
-     case TripStatus.Started:
+    case "Requested":
+    case "Confirmed":
+     case "Started":
     return this.destinationCoords ?? null;
-    case TripStatus.Accepted:
+    case "Accepted":
     return this.pickupCoords;
     default:
       return null;

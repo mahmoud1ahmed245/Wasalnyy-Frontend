@@ -35,7 +35,7 @@
 <app-map 
   (locationEvent)="setLocation($event)"
   [firstPoint]="currentCoords"
-  [secondPoint]="intrip ? (activeTrip.tripStatus === 2 ? pickupCoords : destinationCoords) : null">
+  [secondPoint]="intrip ? (activeTrip.tripStatus === 'Accepted' ? pickupCoords : destinationCoords) : null">
 </app-map>
 
   </div>
