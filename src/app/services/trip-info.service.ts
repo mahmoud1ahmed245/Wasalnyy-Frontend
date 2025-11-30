@@ -24,6 +24,11 @@ updateTrip(tripData: any) {
       this.clearListOfAvailableTrips();
     }
   }
+  updateTripStatus(Status:string){
+    const OldTrip=this.trip.value;
+    const newTrip={...OldTrip,tripStatus:Status};
+    this.trip.next(newTrip);
+  }
 
   updateTripCoords(Coords: any) {
   const currentTrip = this.trip.value;

@@ -20,10 +20,9 @@ export class TripRequestService {
     formData.append('DistinationCoordinates.Lat', dto.DistinationCoordinates.Lat.toString());
     formData.append('DistinationCoordinates.Lng', dto.DistinationCoordinates.Lng.toString());
     formData.append('DestinationName',dto.DistinationCoordinates.locationName!);
-    console.log(formData)
 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
     });
 
     const url = `${this.apiUrl}/Trip/Request`;

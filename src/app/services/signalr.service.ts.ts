@@ -37,7 +37,10 @@ export class SignalrServiceTs {
             this.tripInfoService.updateTrip(trip)})
           
               this.hubConnection.on('tripCanceled',trip=>{
-                console.log(trip);
+             this.tripInfoService.updateTrip(trip);
+             this.tripInfoService.setInTrip(false);
+            this.tripInfoService.clearDriver();
+            this.tripInfoService.clearListOfAvailableTrips();
               })
             
             
@@ -47,10 +50,10 @@ export class SignalrServiceTs {
           this.hubConnection.on('tripLocationUpdated', coords =>{
             this.tripInfoService.updateTripCoords(coords)});
           this.hubConnection.on('tripEnded', () =>{
-            this.tripInfoService.clearTrip();
             this.tripInfoService.setInTrip(false);
             this.tripInfoService.clearDriver();
             this.tripInfoService.clearListOfAvailableTrips();
+          this.tripInfoService.updateTripStatus("Ended");
           });      
           this. hubConnection.on('tripAccepeted', driver=> {
             this.tripInfoService.updateDriver(driver)}
