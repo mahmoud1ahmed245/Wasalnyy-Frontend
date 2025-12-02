@@ -212,7 +212,7 @@ ngOnDestroy(): void {
  submitReview(reviewBody:any){
     this.reviewService.submitReview(reviewBody).subscribe({
       next:res=>{
-        console.log("review Successful",res);
+        console.log("review Successful");
         this.activeTrip=null;
         this.tripInfoService.setInTrip(false);
         this.tripInfoService.clearTrip();
