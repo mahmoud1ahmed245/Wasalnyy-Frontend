@@ -15,6 +15,8 @@ import { ForgotPassword } from './components/forgot-password/forgot-password';
 import { DriverMap } from './components/driver-map/driver-map';
 import { RiderMap } from './components/rider-map/rider-map';
 import { Wallet } from './components/wallet/wallet';
+import { TripHistory } from './components/trip-history/trip-history';
+import { Profile } from './components/profile/profile';
 
 export const routes: Routes = [
   { path: '', component: DashboardRedirectComponent },
@@ -26,6 +28,8 @@ export const routes: Routes = [
   { path: 'face-scan/login', component: FaceScan },
 
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
+  {path:'history',component:TripHistory,canActivate:[AuthGuard]},
+  {path:'profile',component: Profile,canActivate:[AuthGuard]},
   { path: 'admin-dashboard', component: AdminDashboard, canActivate: [AuthGuard], data: { role: 'Admin' } },
 
   { path: 'reset-password', component: ResetPassword },

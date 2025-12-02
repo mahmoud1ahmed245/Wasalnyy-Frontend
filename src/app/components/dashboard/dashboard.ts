@@ -32,20 +32,28 @@ else if (this.role==="driver"){
 this.accountData.getUserData().subscribe({next:res=>{
   this.user=res;
   this.userFirstName=this.user.fullName.split(' ')[0];
-  console.log(this.user)
+
 },error:err=>{
   console.error(err);
 }});  
 })
  }
-goToWallet(){
-  this.router.navigate(['/wallet']);
+ goToRideDashboard(){
+   this.router.navigate([`/${this.role}-map`])
   }
-  goToRideDashboard(){
-  this.router.navigate([`/${this.role}-map`])
-   }
+  goToProfile(){
+    this.router.navigate(['/profile'])
+  }
+
+  goToWallet(){
+    this.router.navigate(['/wallet']);
+    }
 
   logout() {
     this.authService.logout();
   }
+  goToTripHistory(){
+    this.router.navigate(['/history']);
+  }
+
 }
