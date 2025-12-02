@@ -74,7 +74,7 @@ ngOnInit(): void {
     this.activeTrip = {...trip};
     this.currentCoords={...trip.CurrentCoordinates};
     this.pickupCoords={...trip.pickupCoordinates};
-    this.destinationCoords={...trip.distinationCoordinates};
+    this.destinationCoords={...trip.destinationCoordinates};
     this.tripStatus=trip.tripStatus;
       }
      
@@ -88,7 +88,6 @@ ngOnInit(): void {
   });
   this.tripInfoService.driver$.subscribe(driver=>{
     if(driver){
-      console.log(driver);
       this.driver=driver;
     }
     

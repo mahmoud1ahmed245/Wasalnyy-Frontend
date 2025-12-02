@@ -73,7 +73,7 @@ ngOnInit(): void {
             this.activeTrip={...trip};
             this.tripStatus=trip.tripStatus;
             this.pickupCoords={...trip.pickupCoordinates};
-            this.destinationCoords={...trip.distinationCoordinates};
+            this.destinationCoords={...trip.destinationCoordinates};
             }
       }
   })
