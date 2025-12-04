@@ -17,6 +17,14 @@ import { RiderMap } from './components/rider-map/rider-map';
 import { Wallet } from './components/wallet/wallet';
 import { TripHistory } from './components/trip-history/trip-history';
 import { Profile } from './components/profile/profile';
+import { AdminDriversComponent } from './components/admin-driver/admin-driver';
+import { AdminRidersComponent } from './components/admin-rider/admin-rider';
+import { AdminTripsComponent } from './components/admin-trips/admin-trips';
+import { AdminReportsComponent } from './components/admin-reports/admin-reports';
+import { AdminComplaintsComponent } from './components/admin-complaints/admin-complaints';
+import { DriverAccountComponent } from './components/Driver-profile/driver-account';
+import { RiderAccountComponent } from './components/rider-account/rider-account';
+
 import { SubmitComplaint } from './components/submit-complaint/submit-complaint';
 import { ComplaintHistory } from './components/complaint-history/complaint-history';
 
@@ -32,7 +40,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
   {path:'history',component:TripHistory,canActivate:[AuthGuard]},
   {path:'profile',component: Profile,canActivate:[AuthGuard]},
-  { path: 'admin-dashboard', component: AdminDashboard, canActivate: [AuthGuard], data: { role: 'Admin' } },
+  { path: 'admin-dashboard', component: AdminDashboard },
 
   {path:'submit-complaint/:tripId',component:SubmitComplaint,canActivate:[AuthGuard]},
   {path:'view-complaints',component:ComplaintHistory,canActivate:[AuthGuard]},
@@ -45,6 +53,13 @@ export const routes: Routes = [
   { path:'wallet',component:Wallet, canActivate: [AuthGuard]},
   { path: 'payment-failed', component: PaymentFailed },
   { path: 'payment-successful', component: PaymentSuccessful },
+  {path:'admin/drivers',component:AdminDriversComponent},
+  {path:'admin/riders',component:AdminRidersComponent},
+  {path:'admin/trips',component:AdminTripsComponent},
+  {path:'admin/reports',component:AdminReportsComponent},
+  {path:'admin/complaints',component:AdminComplaintsComponent},
+  {path: 'driveraccount',component:DriverAccountComponent},
+  {path: 'rideraccount',component:RiderAccountComponent},
 
 
   { path: '**', redirectTo: '' } 

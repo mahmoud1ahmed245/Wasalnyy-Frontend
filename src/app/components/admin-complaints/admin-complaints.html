@@ -1,0 +1,171 @@
+<div class="container">
+  <div class="header">
+    <h1>📋 Complaints Management</h1>
+    <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <!-- Message -->
+  <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success' : 'error'">
+    {{ message }}
+  </div>
+
+  <!-- Search Tabs -->
+  <div class="search-tabs">
+    <button 
+      class="tab-btn" 
+      [class.active]="searchType === 'driver'"
+      (click)="changeSearchType('driver')"
+    >
+      👨‍💼 Driver Complaints
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="searchType === 'rider'"
+      (click)="changeSearchType('rider')"
+    >
+      👤 Rider Complaints
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="searchType === 'complaint'"
+      (click)="changeSearchType('complaint')"
+    >
+      🔍 Search by ID
+    </button>
+  </div>
+
+  <!-- Search Section - Driver -->
+  <div class="search-section" *ngIf="searchType === 'driver'">
+    <h3>Search Driver Complaints</h3>
+    
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="driverLicense" 
+        placeholder="Enter driver license number"
+      >
+    </div>
+
+    <div class="button-group">
+      <button class="action-btn btn-submitted" (click)="getDriverSubmittedComplaints()" [disabled]="!driverLicense">
+        📤 Submitted by Driver
+      </button>
+      <button class="action-btn btn-against" (click)="getDriverComplaintsAgainst()" [disabled]="!driverLicense">
+        📥 Against Driver
+      </button>
+      <button class="action-btn btn-clear" (click)="clearSearch()">
+        🗑️ Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Section - Rider -->
+  <div class="search-section" *ngIf="searchType === 'rider'">
+    <h3>Search Rider Complaints</h3>
+    
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="riderPhone" 
+        placeholder="Enter rider phone number"
+      >
+    </div>
+
+    <div class="button-group">
+      <button class="action-btn btn-rider-complaints" (click)="getRiderComplaints()" [disabled]="!riderPhone">
+        📋 Get Rider Complaints
+      </button>
+      <button class="action-btn btn-clear" (click)="clearSearch()">
+        🗑️ Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Section - By ID -->
+  <div class="search-section" *ngIf="searchType === 'complaint'">
+    <h3>Search by Complaint ID</h3>
+    
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="complaintId" 
+        placeholder="Enter complaint ID (UUID)"
+      >
+    </div>
+
+    <div class="button-group">
+      <button class="action-btn btn-search" (click)="getComplaintById()" [disabled]="!complaintId">
+        🔍 Search
+      </button>
+      <button class="action-btn btn-clear" (click)="clearSearch()">
+        🗑️ Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Loading complaints...
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" *ngIf="complaints.length > 0 && !isLoading">
+    <h3>Complaints ({{ complaints.length }})</h3>
+    
+    <div class="complaint-card" *ngFor="let complaint of complaints">
+      <div class="complaint-header">
+        <div>
+          <h4>Complaint ID</h4>
+          <p class="complaint-id">{{ complaint.id }}</p>
+        </div>
+        <span [ngClass]="'status-badge status-' + (getStatusText(complaint.status) | lowercase)">
+          {{ getStatusText(complaint.status) }}
+        </span>
+      </div>
+
+      <div class="complaint-content">
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Category:</label>
+            <span>{{ complaint.category }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Submitted By:</label>
+            <span>{{ complaint.submittedById }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Against User:</label>
+            <span>{{ complaint.againstUserId }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Complainer Type:</label>
+            <span>{{ complaint.complainerType === 0 ? 'Rider' : 'Driver' }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Trip ID:</label>
+            <span>{{ complaint.tripId }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Created At:</label>
+            <span>{{ complaint.createdAt | date:'medium' }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="complaint.resolvedAt">
+            <label>Resolved At:</label>
+            <span>{{ complaint.resolvedAt | date:'medium' }}</span>
+          </div>
+        </div>
+
+        <div class="description-box">
+          <label>Description:</label>
+          <p>{{ complaint.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

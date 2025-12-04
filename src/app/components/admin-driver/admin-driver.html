@@ -1,0 +1,99 @@
+<div class="container">
+  <div class="header">
+    <h1>👨‍💼 Drivers Management</h1>
+    <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <!-- Message -->
+  <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success' : 'error'">
+    {{ message }}
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchLicense" 
+        placeholder="Enter driver license number"
+      >
+      <button (click)="getDriverByLicense()">Search by License</button>
+    </div>
+
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchDriverId" 
+        placeholder="Enter driver ID"
+      >
+      <button (click)="getDriverById()">Search by ID</button>
+    </div>
+
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="driverId" 
+        placeholder="Enter driver ID for trip count"
+      >
+      <button (click)="getDriverTripCount()">Get Trip Count</button>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="buttons-section">
+    <button class="action-btn btn-all-drivers" (click)="getAllDrivers()">
+      📋 Get All Drivers
+    </button>
+    <button class="action-btn btn-by-license" (click)="getDriverByLicense()" [disabled]="!searchLicense">
+      🔍 Get by License
+    </button>
+    <button class="action-btn btn-by-license" (click)="getDriverById()" [disabled]="!searchDriverId">
+      🔍 Search by ID
+    </button>
+    <button class="action-btn btn-trip-count" (click)="getDriverTripCount()" [disabled]="!driverId">
+      📊 Trip Count
+    </button>
+    <button class="action-btn btn-trips" (click)="getDriverTrips()" [disabled]="!driverId">
+      🚗 Get Trips
+    </button>
+    <button class="action-btn btn-submitted-complaints" (click)="getSubmittedComplaints()" [disabled]="!searchLicense">
+      📤 Submitted Complaints
+    </button>
+    <button class="action-btn btn-against-complaints" (click)="getComplaintsAgainst()" [disabled]="!searchLicense">
+      📥 Complaints Against
+    </button>
+    <button class="action-btn btn-rating" (click)="getDriverRating()" [disabled]="!searchLicense">
+      ⭐ Get Rating
+    </button>
+    <button class="action-btn btn-suspend" (click)="suspendDriver()" [disabled]="!searchLicense">
+      🚫 Suspend Driver
+    </button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" *ngIf="drivers.length > 0 || isLoading">
+    <h3>Results</h3>
+    <div *ngIf="isLoading" class="loading">Loading...</div>
+    
+    <table *ngIf="!isLoading && drivers.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>License</th>
+          <th>Phone</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of drivers">
+          <td>{{ driver.id }}</td>
+          <td>{{ driver.name }}</td>
+          <td>{{ driver.license }}</td>
+          <td>{{ driver.phone }}</td>
+          <td>{{ driver.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

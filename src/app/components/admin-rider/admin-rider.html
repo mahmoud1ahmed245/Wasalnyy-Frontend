@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="header">
+    <h1>👤 Riders Management</h1>
+    <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <!-- Message -->
+  <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success' : 'error'">
+    {{ message }}
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchPhone" 
+        placeholder="Enter rider phone number"
+      >
+      <button (click)="getRiderByPhone()">Search by Phone</button>
+    </div>
+
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchRiderId" 
+        placeholder="Enter rider ID"
+      >
+      <button (click)="getRiderById()">Search by ID</button>
+    </div>
+
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="riderId" 
+        placeholder="Enter rider ID for operations"
+      >
+      <button (click)="getRiderTripCount()">Get Trip Count</button>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="buttons-section">
+    <button class="action-btn btn-all-riders" (click)="getAllRiders()">
+      📋 Get All Riders
+    </button>
+    <button class="action-btn btn-by-phone" (click)="getRiderByPhone()" [disabled]="!searchPhone">
+      🔍 Search by Phone
+    </button>
+    <button class="action-btn btn-by-id" (click)="getRiderById()" [disabled]="!searchRiderId">
+      🔍 Search by ID
+    </button>
+    <button class="action-btn btn-trip-count" (click)="getRiderTripCount()" [disabled]="!riderId">
+      📊 Trip Count
+    </button>
+    <button class="action-btn btn-trips" (click)="getRiderTrips()" [disabled]="!riderId">
+      🚗 Get Trips
+    </button>
+    <button class="action-btn btn-trips-by-phone" (click)="getRiderTripsByPhone()" [disabled]="!searchPhone">
+      📱 Trips by Phone
+    </button>
+    <button class="action-btn btn-complaints" (click)="getRiderComplaintsByPhone()" [disabled]="!searchPhone">
+      📋 Complaints by Phone
+    </button>
+    <button class="action-btn btn-suspend" (click)="suspendRider()" [disabled]="!riderId">
+      🚫 Suspend Rider
+    </button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" *ngIf="riders.length > 0 || isLoading">
+    <h3>Results</h3>
+    <div *ngIf="isLoading" class="loading">Loading...</div>
+    
+    <table *ngIf="!isLoading && riders.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rider of riders">
+          <td>{{ rider.id }}</td>
+          <td>{{ rider.fullName }}</td>
+          <td>{{ rider.phoneNumber }}</td>
+          <td>{{ rider.email }}</td>
+          <td>{{ rider.createdAt | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

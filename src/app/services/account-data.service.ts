@@ -33,5 +33,17 @@ export class AccountDataService {
           });
     return this.httpClient.post(url, `"${driverId}"`,{headers});
   }
+
+   UpdateInfo(){
+            const token= this.authService.getToken()!;
+      const role=this.authService.getRole()!;
+     const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json' 
+          });
+   const url=`${this.ApiUrl}/${role}/UpdateInfo`;
+   return this.httpClient.get(url,{headers});
+  }
+
   
   }

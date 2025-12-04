@@ -12,8 +12,12 @@ import { AccountDataService } from '../../services/account-data.service';
 })
 export class DashboardRedirectComponent implements OnInit {
 
-  constructor(private router: Router,private authService: AuthService
-    ,private signalrService: SignalrServiceTs,private tripInfoService: TripInfoService,private accountService:AccountDataService
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private signalrService: SignalrServiceTs,
+    private tripInfoService: TripInfoService,
+    private accountService: AccountDataService
   ) {}
 
   ngOnInit(): void {
