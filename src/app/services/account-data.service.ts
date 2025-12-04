@@ -35,8 +35,14 @@ export class AccountDataService {
   }
 
    UpdateInfo(){
-   const url=`${this.ApiUrl}/${this.role}/UpdateInfo`;
-   return this.httpClient.get(url,{headers:this.headers!});
+            const token= this.authService.getToken()!;
+      const role=this.authService.getRole()!;
+     const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json' 
+          });
+   const url=`${this.ApiUrl}/${role}/UpdateInfo`;
+   return this.httpClient.get(url,{headers});
   }
 
   

@@ -91,6 +91,6 @@ export class AdminService {
   }
 
   getComplaintById(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/reports/complaints/${id}`);
+    return this.http.get(`${this.apiUrl}/complaints/${id}`);
   }
 }
