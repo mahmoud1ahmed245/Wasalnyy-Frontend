@@ -19,41 +19,50 @@ export class Dashboard implements OnInit{
 
   constructor(private authService: AuthService, private router: Router
     ,private tripInfoService: TripInfoService,private accountData:AccountDataService) {}
-ngOnInit(): void {
-  this.role=this.authService.getRole()!.toLowerCase();
-  this.tripInfoService.Intrip$.subscribe(intrip=>{
-if(this.role==="rider"){
-
-  this.userMapString=intrip?"Go To Active Trip":"Request A Ride";
-}
-else if (this.role==="driver"){
-  this.userMapString=intrip?"Go To Active Trip":"set yourself as Available";
-}
-this.accountData.getUserData().subscribe({next:res=>{
-  this.user=res;
-  this.userFirstName=this.user.fullName.split(' ')[0];
-
-},error:err=>{
-  console.error(err);
-}});  
-})
- }
- goToRideDashboard(){
-   this.router.navigate([`/${this.role}-map`])
+  
+  ngOnInit(): void {
+    this.role=this.authService.getRole()!.toLowerCase();
+    this.tripInfoService.Intrip$.subscribe(intrip=>{
+      if(this.role==="rider"){
+        this.userMapString=intrip?"Go To Active Trip":"Request A Ride";
+      }
+      else if (this.role==="driver"){
+        this.userMapString=intrip?"Go To Active Trip":"set yourself as Available";
+      }
+      this.accountData.getUserData().subscribe({next:res=>{
+        this.user=res;
+        this.userFirstName=this.user.fullName.split(' ')[0];
+      },error:err=>{
+        console.error(err);
+      }});  
+    })
   }
+
+  goToRideDashboard(){
+    this.router.navigate([`/${this.role}-map`])
+  }
+
   goToProfile(){
     this.router.navigate(['/profile'])
   }
 
+  goToAccount(){
+    if(this.role === 'driver'){
+      this.router.navigate(['/driveraccount'])
+    } else if(this.role === 'rider'){
+      this.router.navigate(['/rideraccount'])
+    }
+  }
+
   goToWallet(){
     this.router.navigate(['/wallet']);
-    }
+  }
 
   logout() {
     this.authService.logout();
   }
+
   goToTripHistory(){
     this.router.navigate(['/history']);
   }
-
 }

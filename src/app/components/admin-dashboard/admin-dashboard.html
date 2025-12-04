@@ -1,1 +1,21 @@
-<p>admin-dashboard works!</p>
+<div class="dashboard-container">
+  <h1 class="dashboard-title">Admin Dashboard</h1>
+  
+  <div class="buttons-grid">
+    <button class="nav-btn drivers-btn" (click)="goToDrivers()">
+      👨‍💼 Drivers
+    </button>
+    
+    <button class="nav-btn riders-btn" (click)="goToRiders()">
+      👤 Riders
+    </button>
+    
+    <button class="nav-btn trips-btn" (click)="goToTrips()">
+      🚗 Trips
+    </button>
+    
+    <button class="nav-btn reports-btn" (click)="goToReports()">
+      📊 Reports
+    </button>
+  </div>
+</div>

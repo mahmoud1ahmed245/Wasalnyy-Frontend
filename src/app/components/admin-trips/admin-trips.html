@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="header">
+    <h1>🚗 Trips Management</h1>
+    <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <!-- Message -->
+  <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success' : 'error'">
+    {{ message }}
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="tripId" 
+        placeholder="Enter trip ID (UUID)"
+      >
+      <button (click)="getTripById()">Search by ID</button>
+    </div>
+
+    <div class="search-group">
+      <select [(ngModel)]="tripStatus" class="status-select">
+        <option value="">Select Trip Status</option>
+        <option *ngFor="let status of tripStatusOptions" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+      <button (click)="getTripsByStatus()">Get by Status</button>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="buttons-section">
+    <button class="action-btn btn-by-id" (click)="getTripById()" [disabled]="!tripId">
+      🔍 Search by ID
+    </button>
+    <button class="action-btn btn-by-status" (click)="getTripsByStatus()" [disabled]="!tripStatus">
+      📊 Get by Status
+    </button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" *ngIf="trips.length > 0 || isLoading">
+    <h3>Results</h3>
+    <div *ngIf="isLoading" class="loading">Loading...</div>
+    
+    <table *ngIf="!isLoading && trips.length > 0">
+      <thead>
+        <tr>
+          <th>Trip ID</th>
+          <th>Driver</th>
+          <th>Rider</th>
+          <th>Status</th>
+          <th>Pickup Location</th>
+          <th>Dropoff Location</th>
+          <th>Requested Date</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let trip of trips">
+          <td>{{ trip.id }}</td>
+          <td>{{ trip.driver?.fullName || 'N/A' }}</td>
+          <td>{{ trip.rider?.fullName || 'N/A' }}</td>
+          <td>
+            <span [ngClass]="'status-' + (trip.status | lowercase)">
+              {{ trip.status }}
+            </span>
+          </td>
+          <td>{{ trip.pickupLocation || 'N/A' }}</td>
+          <td>{{ trip.dropoffLocation || 'N/A' }}</td>
+          <td>{{ trip.requestedDate | date:'medium' }}</td>
+          <td>{{ trip.price || '0' }} EGP</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

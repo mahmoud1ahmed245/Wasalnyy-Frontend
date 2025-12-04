@@ -1,0 +1,239 @@
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../services/admin-service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-admin-riders',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './admin-rider.html',
+  styleUrls: ['./admin-rider.css'],
+})
+export class AdminRidersComponent implements OnInit {
+  riders: any[] = [];
+  selectedRider: any = null;
+  searchPhone: string = '';
+  riderId: string = '';
+  searchRiderId: string = '';
+  isLoading: boolean = false;
+  message: string = '';
+  messageType: 'success' | 'error' = 'success';
+
+  constructor(private adminService: AdminService) { }
+
+  ngOnInit() {
+  }
+
+  goBack() {
+    window.location.href = '/admin';
+  }
+
+  // Get all riders
+  getAllRiders() {
+    this.isLoading = true;
+    this.message = '';
+    this.adminService.getAllRiders().subscribe({
+      next: (data) => {
+        this.riders = data;
+        this.isLoading = false;
+        this.message = `Loaded ${data.length} riders`;
+        this.messageType = 'success';
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.message = 'Error loading riders';
+        this.messageType = 'error';
+      }
+    });
+  }
+
+  // Get rider by phone
+  getRiderByPhone() {
+    if (!this.searchPhone.trim()) {
+      this.message = 'Please enter a phone number';
+      this.messageType = 'error';
+      return;
+    }
+    this.isLoading = true;
+    this.adminService.getRiderByPhone(this.searchPhone).subscribe({
+      next: (data) => {
+        if (data) {
+          this.riders = [data];
+          this.isLoading = false;
+          this.message = 'Rider found: ' + data.fullName;
+          this.messageType = 'success';
+        } else {
+          this.riders = [];
+          this.isLoading = false;
+          this.message = 'Rider not found';
+          this.messageType = 'error';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.riders = [];
+        this.message = 'Rider not found';
+        this.messageType = 'error';
+        console.error('Error details:', err);
+      }
+    });
+  }
+
+  // Get rider by ID
+  getRiderById() {
+    if (!this.searchRiderId.trim()) {
+      this.message = 'Please enter a rider ID';
+      this.messageType = 'error';
+      return;
+    }
+    this.isLoading = true;
+    this.adminService.getRiderTrips(this.searchRiderId).subscribe({
+      next: (data) => {
+        if (data && data.length > 0) {
+          // Get the rider info from the first trip
+          const riderData = data[0]?.rider;
+          if (riderData) {
+            this.riders = [riderData];
+            this.isLoading = false;
+            this.message = `Rider found: ${riderData.fullName}`;
+            this.messageType = 'success';
+          } else {
+            this.riders = [];
+            this.isLoading = false;
+            this.message = 'Rider not found';
+            this.messageType = 'error';
+          }
+        } else {
+          this.riders = [];
+          this.isLoading = false;
+          this.message = 'Rider not found or has no trips';
+          this.messageType = 'error';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.riders = [];
+        this.message = 'Error finding rider by ID';
+        this.messageType = 'error';
+        console.error('Error details:', err);
+      }
+    });
+  }
+
+  // Get rider trip count
+  getRiderTripCount() {
+    if (!this.riderId.trim()) {
+      this.message = 'Please enter a rider ID';
+      this.messageType = 'error';
+      return;
+    }
+    this.isLoading = true;
+    this.adminService.getRiderTripCount(this.riderId).subscribe({
+      next: (data) => {
+        this.message = `Rider ${data.riderId} has ${data.tripCount} trips`;
+        this.messageType = 'success';
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.message = 'Error loading trip count';
+        this.messageType = 'error';
+      }
+    });
+  }
+
+  // Get rider trips
+  getRiderTrips() {
+    if (!this.riderId.trim()) {
+      this.message = 'Please enter a rider ID';
+      this.messageType = 'error';
+      return;
+    }
+    this.isLoading = true;
+    this.adminService.getRiderTrips(this.riderId).subscribe({
+      next: (data) => {
+        this.riders = data;
+        this.isLoading = false;
+        this.message = `Loaded ${data.length} trips`;
+        this.messageType = 'success';
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.message = 'Error loading trips';
+        this.messageType = 'error';
+      }
+    });
+  }
+
+  // Get rider trips by phone
+  getRiderTripsByPhone() {
+    if (!this.searchPhone.trim()) {
+      this.message = 'Please enter a phone number';
+      this.messageType = 'error';
+      return;
+    }
+    this.isLoading = true;
+    this.adminService.getRiderTripsByPhone(this.searchPhone).subscribe({
+      next: (data) => {
+        this.riders = data;
+        this.isLoading = false;
+        this.message = `Loaded ${data.length} trips`;
+        this.messageType = 'success';
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.message = 'Error loading trips';
+        this.messageType = 'error';
+      }
+    });
+  }
+
+  // Get rider complaints by phone
+  getRiderComplaintsByPhone() {
+    if (!this.searchPhone.trim()) {
+      this.message = 'Please enter a phone number';
+      this.messageType = 'error';
+      return;
+    }
+    this.isLoading = true;
+    this.adminService.getRiderComplaintsByPhone(this.searchPhone).subscribe({
+      next: (data) => {
+        this.riders = data;
+        this.isLoading = false;
+        this.message = `Loaded ${data.length} complaints`;
+        this.messageType = 'success';
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.message = 'Error loading complaints';
+        this.messageType = 'error';
+      }
+    });
+  }
+
+  // Suspend rider
+  suspendRider() {
+    if (!this.riderId.trim()) {
+      this.message = 'Please enter a rider ID';
+      this.messageType = 'error';
+      return;
+    }
+    if (confirm('Are you sure you want to suspend this rider?')) {
+      this.isLoading = true;
+      this.adminService.suspendRider(this.riderId).subscribe({
+        next: (data) => {
+          this.message = 'Rider suspended successfully';
+          this.messageType = 'success';
+          this.isLoading = false;
+          this.riderId = '';
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.message = 'Error suspending rider';
+          this.messageType = 'error';
+        }
+      });
+    }
+  }
+}

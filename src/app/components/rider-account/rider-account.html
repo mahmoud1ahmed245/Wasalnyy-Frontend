@@ -1,0 +1,189 @@
+<div class="account-container">
+  <div class="account-header">
+    <button class="back-btn" (click)="goBack()">← Back</button>
+    <h1>Rider Account</h1>
+    <div></div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading your information...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error && !loading" class="alert alert-error">
+    <span>{{ error }}</span>
+    <button (click)="error = ''" class="close-btn">×</button>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="message" class="alert alert-success">
+    <span>{{ message }}</span>
+    <button (click)="message = ''" class="close-btn">×</button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading" class="account-content">
+    <!-- Profile Image Section -->
+    <div class="profile-image-section">
+      <div class="image-container">
+        <img 
+          *ngIf="imagePreview" 
+          [src]="imagePreview" 
+          alt="Profile" 
+          class="profile-image"
+        />
+        <div *ngIf="!imagePreview" class="image-placeholder">
+          <span>No Image</span>
+        </div>
+      </div>
+
+      <div *ngIf="isEditing" class="image-upload">
+        <label for="imageInput" class="upload-label">
+          <span>Change Photo</span>
+          <input 
+            #imageInput
+            type="file" 
+            id="imageInput" 
+            accept="image/*" 
+            (change)="onImageSelected($event)"
+            style="display: none"
+          />
+        </label>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <form class="account-form" (ngSubmit)="saveChanges()" *ngIf="!loading">
+      <!-- Full Name -->
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input
+          id="fullName"
+          type="text"
+          [(ngModel)]="fullName"
+          name="fullName"
+          [readonly]="!isEditing"
+          class="form-input"
+          [class.edit-mode]="isEditing"
+          placeholder="Enter full name"
+        />
+      </div>
+
+      <!-- Email with Update Button -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="email-input-group">
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            readonly
+            class="form-input"
+            placeholder="Email"
+          />
+          <button
+            type="button"
+            class="btn-email-change"
+            (click)="openEmailModal()"
+            [disabled]="isEditing"
+          >
+            Change Email
+          </button>
+        </div>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input
+          id="phoneNumber"
+          type="tel"
+          [(ngModel)]="phoneNumber"
+          name="phoneNumber"
+          [readonly]="!isEditing"
+          class="form-input"
+          [class.edit-mode]="isEditing"
+          placeholder="Enter phone number"
+        />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="toggleEditMode()"
+          [disabled]="isSaving"
+        >
+          {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+        </button>
+
+        <button
+          *ngIf="isEditing"
+          type="submit"
+          class="btn btn-success"
+          [disabled]="isSaving"
+        >
+          {{ isSaving ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Email Update Modal -->
+  <div *ngIf="isEmailModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Update Email</h2>
+        <button class="close-modal-btn" (click)="closeEmailModal()" [disabled]="isUpdatingEmail || emailMessage">×</button>
+      </div>
+
+      <!-- Modal Error -->
+      <div *ngIf="emailError" class="alert alert-error">
+        <span>{{ emailError }}</span>
+      </div>
+
+      <!-- Modal Success -->
+      <div *ngIf="emailMessage" class="alert alert-success">
+        <span>{{ emailMessage }}</span>
+      </div>
+
+      <div class="modal-body" *ngIf="!emailMessage">
+        <div class="form-group">
+          <label for="newEmail">New Email Address</label>
+          <input
+            id="newEmail"
+            type="email"
+            [(ngModel)]="newEmail"
+            name="newEmail"
+            placeholder="Enter new email"
+            class="form-input"
+            [disabled]="isUpdatingEmail"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeEmailModal()"
+          [disabled]="isUpdatingEmail || emailMessage"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateEmail()"
+          [disabled]="isUpdatingEmail"
+        >
+          {{ isUpdatingEmail ? 'Updating...' : 'Update Email' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,28 +12,57 @@ import { AccountDataService } from '../../services/account-data.service';
 })
 export class DashboardRedirectComponent implements OnInit {
 
-  constructor(private router: Router,private authService: AuthService
-    ,private signalrService: SignalrServiceTs,private tripInfoService: TripInfoService,private accountService:AccountDataService
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private signalrService: SignalrServiceTs,
+    private tripInfoService: TripInfoService,
+    private accountService: AccountDataService
   ) {}
 
   ngOnInit(): void {
     const token = this.authService.getToken();
     const role = this.authService.getRole()?.toLowerCase();
-   if(!token||!role||this.authService.CheckTokenExpired(token)) this.router.navigate(['/choose-user-type']);
-   else {
-    console.log(this.accountService.getUserData());
-     this.signalrService.startConnection().then(() => {
-      setTimeout(()=>{
-       if(this.tripInfoService.isInTripValue) {
-          this.router.navigate([`/${role}-map`]);
-        }else{
-           this.router.navigate([`/dashboard`]);
-        } 
-
-      },2000);
-
-     });
-
-   }
+    
+    // Check if token exists, role exists, and token is not expired
+    if(!token || !role || this.authService.CheckTokenExpired(token)) {
+      this.router.navigate(['/choose-user-type']);
+    } else {
+      // Load user data
+      this.accountService.getUserData().subscribe({
+        next: (userData) => {
+          console.log('User data loaded:', userData);
+          
+          // Start SignalR connection
+          this.signalrService.startConnection().then(() => {
+            setTimeout(() => {
+              // Check if user is in an active trip
+              if(this.tripInfoService.isInTripValue) {
+                this.router.navigate([`/${role}-map`]);
+              } else {
+                this.router.navigate(['/dashboard']);
+              } 
+            }, 2000);
+          }).catch((err) => {
+            console.error('SignalR connection error:', err);
+            // Still navigate to dashboard even if SignalR fails
+            this.router.navigate(['/dashboard']);
+          });
+        },
+        error: (err) => {
+          console.error('Error loading user data:', err);
+          // Still proceed with navigation
+          this.signalrService.startConnection().then(() => {
+            setTimeout(() => {
+              if(this.tripInfoService.isInTripValue) {
+                this.router.navigate([`/${role}-map`]);
+              } else {
+                this.router.navigate(['/dashboard']);
+              } 
+            }, 2000);
+          });
+        }
+      });
+    }
   }
 }

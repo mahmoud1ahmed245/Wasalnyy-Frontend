@@ -31,5 +31,11 @@ export class AccountDataService {
     const url=`${this.ApiUrl}/Rider/DriverData`;
     return this.httpClient.post(url, `"${driverId}"`,{headers:this.headers!});
   }
+
+   UpdateInfo(){
+   const url=`${this.ApiUrl}/${this.role}/UpdateInfo`;
+   return this.httpClient.get(url,{headers:this.headers!});
+  }
+
   
   }

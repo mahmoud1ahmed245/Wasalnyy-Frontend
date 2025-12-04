@@ -1,11 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../services/admin-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './admin-dashboard.html',
-  styles: ``,
+  styleUrls: ['./admin-dashboard.css'],
 })
-export class AdminDashboard {
+export class AdminDashboard implements OnInit {
 
+  constructor(private adminService: AdminService) { }
+
+  ngOnInit() {
+  }
+
+  goToDrivers() {
+    // Navigate to drivers page
+    window.location.href = '/admin/drivers';
+  }
+
+  goToRiders() {
+    // Navigate to riders page
+    window.location.href = '/admin/riders';
+  }
+
+  goToTrips() {
+    // Navigate to trips page
+    window.location.href = '/admin/trips';
+  }
+
+  goToReports() {
+    // Navigate to reports page
+    window.location.href = '/admin/reports';
+  }
 }
