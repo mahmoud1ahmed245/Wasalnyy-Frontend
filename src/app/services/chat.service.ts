@@ -10,7 +10,6 @@ import { MessagePaginationDto } from '../models/message-pagination-DTO';
   providedIn: 'root',
 })
 export class ChatService {
-  // Assuming the controller route is 'api/chat'
   private baseUrl = `${environment.apiUrl}/Chat`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -25,10 +24,7 @@ export class ChatService {
     });
   }
 
-  /**
-   * Fetches the sidebar list (conversations)
-   * GET: {apiUrl}/chat/sidebar
-   */
+ 
   getChatSidebar(): Observable<ChatSidebarListResponse> {
     const headers = this.getAuthHeaders();
     return this.http.get<ChatSidebarListResponse>(`${this.baseUrl}/sidebar`, { headers });
