@@ -27,6 +27,12 @@ export class HeaderBar implements OnInit{
     this.authService.logout();
   }
     backToDashboard(){
-          this.router.navigate(['./dashboard'])
+      if(this.authService.getRole()!=="Admin"){
+
+        this.router.navigate(['./dashboard'])
+      }
+      else{
+        this.router.navigate(['/admin-dashboard']);
+      }
         }
 }

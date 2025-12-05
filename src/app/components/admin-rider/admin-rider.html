@@ -1,7 +1,7 @@
+<app-header-bar></app-header-bar>
 <div class="container">
   <div class="header">
-    <h1>👤 Riders Management</h1>
-    <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+    <h1> Riders Management</h1>
   </div>
 
   <!-- Message -->
@@ -17,16 +17,7 @@
         [(ngModel)]="searchPhone" 
         placeholder="Enter rider phone number"
       >
-      <button (click)="getRiderByPhone()">Search by Phone</button>
-    </div>
-
-    <div class="search-group">
-      <input 
-        type="text" 
-        [(ngModel)]="searchRiderId" 
-        placeholder="Enter rider ID"
-      >
-      <button (click)="getRiderById()">Search by ID</button>
+      <button (click)="getRiderByPhone()">Get by Phone</button>
     </div>
 
     <div class="search-group">
@@ -40,30 +31,27 @@
   </div>
 
   <!-- Action Buttons -->
-  <div class="buttons-section">
+  <div class="buttons-section d-flex flex-wrap justify-content-center">
     <button class="action-btn btn-all-riders" (click)="getAllRiders()">
-      📋 Get All Riders
+      Get All Riders
     </button>
     <button class="action-btn btn-by-phone" (click)="getRiderByPhone()" [disabled]="!searchPhone">
-      🔍 Search by Phone
-    </button>
-    <button class="action-btn btn-by-id" (click)="getRiderById()" [disabled]="!searchRiderId">
-      🔍 Search by ID
+       Search by Phone
     </button>
     <button class="action-btn btn-trip-count" (click)="getRiderTripCount()" [disabled]="!riderId">
-      📊 Trip Count
+       Trip Count
     </button>
     <button class="action-btn btn-trips" (click)="getRiderTrips()" [disabled]="!riderId">
-      🚗 Get Trips
+       Get Trips
     </button>
     <button class="action-btn btn-trips-by-phone" (click)="getRiderTripsByPhone()" [disabled]="!searchPhone">
-      📱 Trips by Phone
+       Trips by Phone
     </button>
     <button class="action-btn btn-complaints" (click)="getRiderComplaintsByPhone()" [disabled]="!searchPhone">
-      📋 Complaints by Phone
+       Complaints by Phone
     </button>
     <button class="action-btn btn-suspend" (click)="suspendRider()" [disabled]="!riderId">
-      🚫 Suspend Rider
+       Suspend Rider
     </button>
   </div>
 

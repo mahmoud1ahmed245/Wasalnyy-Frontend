@@ -67,7 +67,7 @@ export class DriverAccountComponent implements OnInit {
     
     this.accountDataService.getUserData().subscribe({
       next: (res: any) => {
-        console.log('Driver data loaded:', res);
+       
         this.fullName = res.fullName || '';
         this.phoneNumber = res.phoneNumber || '';
         this.email = res.email || '';
@@ -83,8 +83,7 @@ export class DriverAccountComponent implements OnInit {
 
         this.storeOriginalData();
         this.loading = false;
-        console.log('vec model:', this.vehicleModel);
-      },
+        },
       error: (err) => {
         console.error('Error loading driver data:', err);
         this.error = 'Failed to load driver information';

@@ -1,7 +1,7 @@
+<app-header-bar></app-header-bar>
 <div class="container">
   <div class="header">
-    <h1>👨‍💼 Drivers Management</h1>
-    <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+    <h1> Drivers Management</h1>
   </div>
 
   <!-- Message -->
@@ -17,18 +17,8 @@
         [(ngModel)]="searchLicense" 
         placeholder="Enter driver license number"
       >
-      <button (click)="getDriverByLicense()">Search by License</button>
+      <button (click)="getDriverByLicense()">Get by License</button>
     </div>
-
-    <div class="search-group">
-      <input 
-        type="text" 
-        [(ngModel)]="searchDriverId" 
-        placeholder="Enter driver ID"
-      >
-      <button (click)="getDriverById()">Search by ID</button>
-    </div>
-
     <div class="search-group">
       <input 
         type="text" 
@@ -40,33 +30,30 @@
   </div>
 
   <!-- Action Buttons -->
-  <div class="buttons-section">
+  <div class="buttons-section d-flex flex-wrap justify-content-center">
     <button class="action-btn btn-all-drivers" (click)="getAllDrivers()">
-      📋 Get All Drivers
+       Get All Drivers
     </button>
     <button class="action-btn btn-by-license" (click)="getDriverByLicense()" [disabled]="!searchLicense">
-      🔍 Get by License
-    </button>
-    <button class="action-btn btn-by-license" (click)="getDriverById()" [disabled]="!searchDriverId">
-      🔍 Search by ID
+       Get by License
     </button>
     <button class="action-btn btn-trip-count" (click)="getDriverTripCount()" [disabled]="!driverId">
-      📊 Trip Count
+       Trip Count
     </button>
     <button class="action-btn btn-trips" (click)="getDriverTrips()" [disabled]="!driverId">
-      🚗 Get Trips
+       Get Trips
     </button>
     <button class="action-btn btn-submitted-complaints" (click)="getSubmittedComplaints()" [disabled]="!searchLicense">
-      📤 Submitted Complaints
+       Submitted Complaints
     </button>
     <button class="action-btn btn-against-complaints" (click)="getComplaintsAgainst()" [disabled]="!searchLicense">
-      📥 Complaints Against
+       Complaints Against
     </button>
     <button class="action-btn btn-rating" (click)="getDriverRating()" [disabled]="!searchLicense">
-      ⭐ Get Rating
+       Get Rating
     </button>
     <button class="action-btn btn-suspend" (click)="suspendDriver()" [disabled]="!searchLicense">
-      🚫 Suspend Driver
+       Suspend Driver
     </button>
   </div>
 
@@ -88,9 +75,9 @@
       <tbody>
         <tr *ngFor="let driver of drivers">
           <td>{{ driver.id }}</td>
-          <td>{{ driver.name }}</td>
+          <td>{{ driver.fullName}}</td>
           <td>{{ driver.license }}</td>
-          <td>{{ driver.phone }}</td>
+          <td>{{ driver.phoneNumber }}</td>
           <td>{{ driver.email }}</td>
         </tr>
       </tbody>
