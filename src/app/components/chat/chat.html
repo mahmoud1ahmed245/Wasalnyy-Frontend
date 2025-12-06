@@ -18,10 +18,10 @@
       <div 
         *ngFor="let message of messages; trackBy: trackByMessageId"
         class="message-row"
-        [class.user-row]="message.sender === 'user'"
-        [class.bot-row]="message.sender === 'bot'">
+        [class.user-row]="message.sender === 'Me'"
+        [class.bot-row]="message.sender === 'Other'">
         
-        <div class="message-bubble" [class.user-bubble]="message.sender === 'user'" [class.bot-bubble]="message.sender === 'bot'">
+        <div class="message-bubble" [class.user-bubble]="message.sender === 'Me'" [class.bot-bubble]="message.sender === 'Other'">
           <p class="message-text">{{ message.text }}</p>
           <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
         </div>

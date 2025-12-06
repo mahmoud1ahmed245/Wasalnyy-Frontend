@@ -11,9 +11,7 @@ import { GetMessageDTO } from '../models/get-message-DTo';
 export class ChatSignalRService {
   private hubConnection!: signalR.HubConnection;
   private hubUrl: string = environment.ChatHubUrl;
-  // Observable for receiving messages
   public messageReceived = new Subject<GetMessageDTO>();  
-  // Connection status - use BehaviorSubject to track current state
   public connectionEstablished = new BehaviorSubject<boolean>(false);
   public messageSent = new Subject<GetMessageDTO>();
   constructor(private authService: AuthService) {}
@@ -28,8 +26,7 @@ export class ChatSignalRService {
           const token = this.authService.getToken();
           if (!token || this.authService.CheckTokenExpired(token)) {
             console.warn('Token expired or missing. Logging out...');
-           // this.authService.logout();
-            return ''; // Return empty token, connection will fail
+            return ''; 
           }
           return token;
         }
@@ -37,7 +34,6 @@ export class ChatSignalRService {
 
       .withAutomaticReconnect({
         nextRetryDelayInMilliseconds: retryContext => {
-          // Retry after 0, 2, 10, 30 seconds
           if (retryContext.previousRetryCount === 0) return 0;
           if (retryContext.previousRetryCount === 1) return 2000;
           if (retryContext.previousRetryCount === 2) return 10000;
@@ -48,7 +44,6 @@ export class ChatSignalRService {
 
     this.hubConnection = connectionBuilder.build();
 
-    // Register reconnection handlers
     this.hubConnection.onreconnecting(() => {
       console.log('SignalR reconnecting...');
       this.connectionEstablished.next(false);
@@ -64,7 +59,6 @@ export class ChatSignalRService {
       this.connectionEstablished.next(false);
     });
 
-    // Start the connection
     return this.hubConnection
       .start()
       .then(() => {
@@ -80,15 +74,13 @@ export class ChatSignalRService {
   }
 
     private registerOnServerEvents(): void {
-    // 👇 Listen for 'receivemessage' using the DTO
     this.hubConnection.on('receivemessage', (message: GetMessageDTO) => {
-      console.log('📩 SignalR (Receive):', message);
+      console.log(' SignalR (Receive):', message);
       this.messageReceived.next(message);
     });
 
-  // 2. Outgoing messages (synced from my other devices)
     this.hubConnection.on('messagesent', (message: GetMessageDTO) => {
-      console.log('📤 SignalR (Sync from other device):', message);
+      console.log('SignalR (Sync from other device):', message);
       this.messageSent.next(message);
     });
 

@@ -21,7 +21,7 @@ import { GetMessageDTO } from '../../models/get-message-DTo';
 interface Message {
   id: number;
   text: string;
-  sender: 'user' | 'bot';
+  sender: 'Me' | 'Other';
   timestamp: Date;
 }
 
@@ -62,41 +62,37 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
     if (changes['receiverId'] && this.receiverId) {
-      console.log('🔄 UI: Switched chat to receiver ID:', this.receiverId);
+      console.log(' UI: Switched chat to receiver ID:', this.receiverId);
       this.loadConversationHistory(this.receiverId);
     }
   }
 
- 
   loadConversationHistory(userId: string): void {
-    this.messages = []; // Clear previous chat
-    console.log(`⏳ Fetching history for user: ${userId}`);
+    this.messages = []; 
+    console.log(` Fetching history for user: ${userId}`);
 
     this.chatService.getConversation(userId).subscribe({
       next: (response: MessagePaginationDto) => {
-        console.log('📩 History loaded:', response);
+        console.log(' History loaded:', response);
 
         const historyMessages: Message[] = response.messages.map((apiMsg) => ({
           id: apiMsg.id,
           text: apiMsg.content,
 
-       
-          sender: apiMsg.isMessageFromMe ? 'user' : 'bot',
+          sender: apiMsg.isMessageFromMe ? 'Me' : 'Other',
 
           timestamp: new Date(apiMsg.sentAt),
         }));
 
-     
         historyMessages.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
         this.messages = historyMessages;
         this.shouldScroll = true;
       },
       error: (err) => {
-        console.error('❌ Error loading history:', err);
-        this.addBotMessage('Failed to load conversation history.');
+        console.error(' Error loading history:', err);
+        this.addOtherUserMessage('Failed to load conversation history.');
       },
     });
   }
@@ -108,40 +104,29 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy, OnChanges {
     }
   }
 
-
-
- 
-
- 
   private subscribeToMessages(): void {
-    
-   
-    const sub1 = this.signalRService.messageReceived.subscribe(
-      (message: GetMessageDTO) => {
-        if (message.senderId === this.receiverId) {
-          
-          this.messages.push({
-            id: message.id,      
-            text: message.content,
-            sender: 'bot',         
-            timestamp: new Date(message.sentAt)
-          });
-          
-          this.shouldScroll = true;
-        }
-      }
-    );
+    const sub1 = this.signalRService.messageReceived.subscribe((message: GetMessageDTO) => {
 
-   
-    const sub2 = this.signalRService.messageSent.subscribe((message: GetMessageDTO) => {
       
-      if (message.receiverId === this.receiverId) {
-        
+      if (message.senderId === this.receiverId) {
         this.messages.push({
-          id: message.id,        
+          id: message.id,
           text: message.content,
-          sender: 'user',         
-          timestamp: new Date(message.sentAt)
+          sender: 'Other',
+          timestamp: new Date(message.sentAt),
+        });
+
+        this.shouldScroll = true;
+      }
+    });
+
+    const sub2 = this.signalRService.messageSent.subscribe((message: GetMessageDTO) => {
+      if (message.receiverId === this.receiverId) {
+        this.messages.push({
+          id: message.id,
+          text: message.content,
+          sender: 'Me' ,
+          timestamp: new Date(message.sentAt),
         });
 
         this.shouldScroll = true;
@@ -151,25 +136,22 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy, OnChanges {
     this.subscriptions.add(sub1);
     this.subscriptions.add(sub2);
   }
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   private subscribeToConnectionStatus(): void {
-    const sub = this.signalRService.connectionEstablished.subscribe(
-      (isConnected: boolean) => {
-        this.isConnected = isConnected;
+    const sub = this.signalRService.connectionEstablished.subscribe((isConnected: boolean) => {
+      this.isConnected = isConnected;
 
-        if (isConnected) {
-          console.log('📡 SignalR Status: ONLINE');
-        } else {
-          console.warn('📡 SignalR Status: OFFLINE (Disconnected)');
-        }
+      if (isConnected) {
+        console.log(' SignalR Status: ONLINE');
+      } else {
+        console.warn(' SignalR Status: OFFLINE (Disconnected)');
       }
-    );
+    });
 
-
-     this.subscriptions.add(sub);
+    this.subscriptions.add(sub);
   }
 
   sendMessage(): void {
@@ -180,24 +162,24 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy, OnChanges {
     }
 
     if (!this.signalRService.isConnected()) {
-      console.warn('⚠️ Cannot send: SignalR is not connected.');
-      this.addBotMessage('Not connected to server. Please wait...');
+      console.warn('Cannot send: SignalR is not connected.');
+      this.addOtherUserMessage('Not connected to server. Please wait...');
       return;
     }
 
-    this.addUserMessage(trimmedInput);
+    this.addMyMessage(trimmedInput);
 
     console.log(`📤 SignalR: Sending message to '${this.receiverId}'...`);
 
     this.signalRService
       .sendMessage(this.receiverId, trimmedInput)
       .then((backendResponse: any) => {
-        console.log('✅ SignalR: Message sent successfully!');
+        console.log('SignalR: Message sent successfully!');
         console.log(' Backend Output/Response:', backendResponse);
       })
       .catch((err) => {
-        console.error('❌ SignalR: Failed to send message:', err);
-        this.addBotMessage('Failed to send message.');
+        console.error('SignalR: Failed to send message:', err);
+        this.addOtherUserMessage('Failed to send message.');
       });
 
     this.userInput = '';
@@ -210,21 +192,21 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy, OnChanges {
     }
   }
 
-  private addUserMessage(text: string): void {
+  private addMyMessage(text: string): void {
     this.messages.push({
       id: this.messageIdCounter--,
       text,
-      sender: 'user',
+      sender: 'Me' ,
       timestamp: new Date(),
     });
     this.shouldScroll = true;
   }
 
-  private addBotMessage(text: string): void {
+  private addOtherUserMessage(text: string): void {
     this.messages.push({
       id: this.messageIdCounter--,
       text,
-      sender: 'bot',
+      sender: 'Other',
       timestamp: new Date(),
     });
     this.shouldScroll = true;

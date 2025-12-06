@@ -51,4 +51,9 @@ export class ChatLayout {
     console.log('🔌 ChatLayout: ngOnDestroy called, stopping SignalR connection...');
     this.signalRService.stopConnection();
   }
+  //  @HostListener('window:beforeunload')
+  // onWindowUnload(): void {
+  //   console.log('🔒 Window unloading -> stopping SignalR connection...');
+  //   this.signalRService.stopConnection();
+  // }
 }

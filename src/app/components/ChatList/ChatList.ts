@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UISidebarChatItem } from '../../models/UI-sidebar-chat-item';
 import { ChatService } from '../../services/chat.service';
 import { ChatSidebarListResponse } from '../../models/Chat-sidebar-response';
-import { ChatSignalRService } from '../../services/ChatSignalR.service'; // Import SignalR Service
+import { ChatSignalRService } from '../../services/ChatSignalR.service';
 import { GetMessageDTO } from '../../models/get-message-DTo';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -34,41 +34,55 @@ export class ChatList {
 
   ngOnInit(): void {
     this.currentUserId = this.getUserIdFromToken();
-     this.loadCurrentUserProfile();
+    this.loadCurrentUserProfile();
     this.loadChatList();
     this.subscribeToRealtimeMessages();
-   
   }
 
+  private subscribeToRealtimeMessages(): void {
+    this.signalRSub.add(
+      this.signalRService.messageReceived.subscribe((message: GetMessageDTO) => {
+        console.log('List received update from:', message.senderId);
+        message.isMessageFromMe=false
+        this.updateChatList(message);
+      })
+    );
 
- private subscribeToRealtimeMessages(): void {
-    this.signalRSub = this.signalRService.messageReceived.subscribe((message: GetMessageDTO) => {
-      console.log(' List received update for:', message.senderId);
+  
+    if (this.signalRService.messageSent) {
+      this.signalRSub.add(
+        this.signalRService.messageSent.subscribe((message: GetMessageDTO) => {
+          console.log('List syncing sent message to:', message.receiverId);
+          message.isMessageFromMe=true
+          this.updateChatList(message);
+        })
+      );
+    }
+  }
 
-      const existingChatIndex = this.chats.findIndex((c) => c.otherUserID === message.senderId);
+  private updateChatList( message: GetMessageDTO): void {
+    const existingChatIndex = this.chats.findIndex((c) => c.otherUserID === message.receiverId);
 
-      if (existingChatIndex !== -1) {
-        const chat = this.chats[existingChatIndex];
+    if (existingChatIndex !== -1) {
+      const chat = this.chats[existingChatIndex];
 
-        chat.lastMessgeContet = message.content;
+      chat.lastMessgeContet = message.isMessageFromMe ? `You: ${message.content}` : message.content;
 
-        chat.lastMessageDate = new Date(message.sentAt).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
+      chat.lastMessageDate = new Date(message.sentAt).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 
-        if (!chat.isActive) {
-          chat.unreadCount++;
-        }
-
-        this.chats.splice(existingChatIndex, 1);
-        this.chats.unshift(chat);
-      } else {
-        console.log('New user messaged! Reloading list to get Name/Avatar...');
-
-        this.loadChatList();
+      if (!message.isMessageFromMe && !chat.isActive) {
+        chat.unreadCount++;
       }
-    });
+
+      this.chats.splice(existingChatIndex, 1);
+      this.chats.unshift(chat);
+    } else {
+      console.log('New conversation detected! Reloading list...');
+      this.loadChatList();
+    }
   }
 
   private getUserIdFromToken(): string | null {
@@ -93,24 +107,21 @@ export class ChatList {
 
     this.chatService.getUserName(this.currentUserId).subscribe({
       next: (res) => {
-        this.currentUserName = res.userName; 
+        this.currentUserName = res.userName;
         console.log('Current User Name:', this.currentUserName, 'ID:', this.currentUserId);
-        
+
         this.currentUserAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
           this.currentUserName
         )}&background=0D8ABC&color=fff`;
-
       },
       error: (err) => console.error('Error fetching user profile from ChatService', err),
     });
   }
 
-
   ngOnDestroy(): void {
     this.signalRSub?.unsubscribe();
   }
 
- 
   loadChatList(): void {
     console.log('ChatList: Fetching sidebar data...');
 
@@ -153,7 +164,7 @@ export class ChatList {
       },
     });
   }
- 
+
   private checkDeepLink(): void {
     const targetUserId = this.route.snapshot.queryParams['userId'];
 
@@ -167,14 +178,14 @@ export class ChatList {
           next: (res) => {
             const newChat: UISidebarChatItem = {
               otherUserID: targetUserId,
-              otherUserName: res.userName, 
-              lastMessgeContet: 'Start a new conversation',
+              otherUserName: res.userName,
+              lastMessgeContet: 'New conversation',
               lastMessageDate: null,
               unreadCount: 0,
               isLastMessageFromMe: false,
               isActive: false,
               avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                res.userName 
+                res.userName
               )}&background=random&color=fff`,
             };
 
